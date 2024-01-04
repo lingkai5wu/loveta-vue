@@ -1,13 +1,10 @@
 import router from '@/router'
 import { useTokenStore } from '@/stores/token'
 import axios from 'axios'
-import { createDiscreteApi } from 'naive-ui'
 
 const baseURL = '/api'
 const instance = axios.create({ baseURL })
 const errMsg = '服务异常'
-
-const { message } = createDiscreteApi(['message'])
 
 instance.interceptors.request.use(
   (config) => {
@@ -33,11 +30,11 @@ instance.interceptors.response.use(
       tokenStore.removeToken()
       router.push('/login')
     }
-    message.error(result.data.msg || errMsg)
+    window.$message.error(result.data.msg || errMsg)
     return Promise.reject(result.data)
   },
   (err) => {
-    message.error(errMsg)
+    window.$message.error(errMsg)
     return Promise.reject(err)
   }
 )

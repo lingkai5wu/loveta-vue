@@ -1,6 +1,6 @@
 <script setup>
 import { useMenuStore } from '@/stores/menu.js'
-import { Link } from '@vicons/ionicons5'
+import { OpenOutline } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 
@@ -22,7 +22,7 @@ function renderMenuLabel(option) {
 function renderMenuExtra(option) {
   // 外链加个小上标
   if (option.href) {
-    return h(NIcon, null, { default: () => h(Link) })
+    return h(NIcon, null, { default: () => h(OpenOutline) })
   }
 }
 </script>

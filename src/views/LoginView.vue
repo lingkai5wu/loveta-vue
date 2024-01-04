@@ -2,7 +2,6 @@
 import router from '@/router'
 import { useTokenStore } from '@/stores/token.js'
 import request from '@/utils/request.js'
-import { useMessage } from 'naive-ui'
 
 const formData = ref({
   phone: '18888888888',
@@ -10,12 +9,11 @@ const formData = ref({
 })
 
 const tokenStore = useTokenStore()
-const message = useMessage()
 
 function onLogin() {
   request.post('/auth/login', formData.value).then((result) => {
     tokenStore.setToken(result.data)
-    message.success('登录成功')
+    window.$message.success('登录成功')
     console.log(tokenStore.name, tokenStore.value)
     router.push('/')
   })
