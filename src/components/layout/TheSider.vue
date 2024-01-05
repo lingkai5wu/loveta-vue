@@ -6,21 +6,20 @@ import { RouterLink } from 'vue-router'
 
 const menuStore = useMenuStore()
 
-function renderMenuLabel(option) {
-  // 外链
-  if (option.href) {
-    return h('a', { href: option.href, target: '_blank' }, option.label)
+function renderMenuLabel(menuOption) {
+  switch (menuOption.type) {
+    case 'ROUTE':
+      return h(RouterLink, { to: { name: menuOption.data } }, { default: () => menuOption.label })
+    case 'LINK':
+      return h('a', { href: menuOption.data, target: '_blank' }, menuOption.label)
+    default:
+      return menuOption.label
   }
-  // 路由
-  if (option.path) {
-    return h(RouterLink, { to: { name: option.name } }, { default: () => option.label })
-  }
-  return option.label
 }
 
-function renderMenuExtra(option) {
+function renderMenuExtra(menuOption) {
   // 外链加个小上标
-  if (option.href) {
+  if (menuOption.type === 'LINK') {
     return h(NIcon, null, { default: () => h(OpenOutline) })
   }
 }
@@ -29,7 +28,7 @@ function renderMenuExtra(option) {
 <template>
   <n-menu
     :options="menuStore.menuOptions"
-    key-field="name"
+    key-field="id"
     :render-label="renderMenuLabel"
     :render-extra="renderMenuExtra"
   />

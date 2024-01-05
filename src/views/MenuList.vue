@@ -6,7 +6,8 @@ import { Add } from '@vicons/ionicons5'
 
 const columns = ref([
   { title: '菜单名', key: 'label' },
-  { title: '路由名', key: 'name' },
+  { title: '菜单类型', key: 'type' },
+  { title: '附加数据', key: 'data' },
   {
     title: '操作',
     key: 'actions',
@@ -32,14 +33,23 @@ async function getTableData() {
 }
 
 const isDrawerShow = ref(false)
-const drawerTitle = ref()
-const formData = ref({})
+const drawerTitle = ref('')
+const formData = ref({
+  pid: 0,
+  id: 0,
+  type: 0,
+  label: '',
+  data: ''
+})
 let onFormSubmit
 
 function onAdd(row) {
   isDrawerShow.value = true
-  drawerTitle.value = row ? '新增菜单' : '新增根菜单'
-  formData.value.pid = row ? row.id : 0
+  drawerTitle.value = '新增菜单'
+  formData.value = {
+    type: 'ROUTE',
+    pid: row ? row.id : 0
+  }
   onFormSubmit = () => {
     saveMenu(formData.value).then(() => formSubmitSuccess('保存成功'))
   }
@@ -48,7 +58,13 @@ function onAdd(row) {
 function onEdit(row) {
   isDrawerShow.value = true
   drawerTitle.value = '编辑菜单'
-  formData.value = { id: row.id, label: row.label, name: row.name }
+  formData.value = {
+    id: row.id,
+    pid: row.pid,
+    type: row.type,
+    label: row.label,
+    data: row.data
+  }
   onFormSubmit = () => {
     updateMenu(formData.value).then(() => formSubmitSuccess('更新成功'))
   }
@@ -56,14 +72,14 @@ function onEdit(row) {
 
 function onDelete(row) {
   removeMenu(row.id).then(() => {
-    window.$message.info('删除成功')
+    window.$message.success('删除成功')
     getTableData()
   })
 }
 
 function formSubmitSuccess(message) {
   isDrawerShow.value = false
-  window.$message.info(message)
+  window.$message.success(message)
   getTableData()
 }
 </script>
@@ -76,7 +92,7 @@ function formSubmitSuccess(message) {
           <Add />
         </n-icon>
       </template>
-      新增根菜单
+      根菜单
     </n-button>
     <n-data-table
       :columns="columns"
@@ -88,17 +104,33 @@ function formSubmitSuccess(message) {
   <n-drawer v-model:show="isDrawerShow" :width="502">
     <n-drawer-content :title="drawerTitle" closable>
       <n-form :model="formData">
-        <n-form-item label="父菜单" v-if="formData.pid">
+        <n-form-item label="根菜单">
+          <n-switch
+            v-model:value="formData.pid"
+            :round="false"
+            :checked-value="0"
+            :unchecked-value="null"
+          />
+        </n-form-item>
+        <n-form-item label="菜单类型">
+          <n-radio-group v-model:value="formData.type">
+            <n-radio-button label="父菜单" value="PARENT" />
+            <n-radio-button label="路由" value="ROUTE" />
+            <n-radio-button label="链接" value="LINK" />
+          </n-radio-group>
+        </n-form-item>
+        <n-form-item label="上级菜单" v-if="formData.pid !== 0">
           <n-tree-select v-model:value="formData.pid" :options="tableData" key-field="id" />
         </n-form-item>
         <n-form-item label="菜单名">
           <n-input v-model:value="formData.label" />
         </n-form-item>
-        <n-form-item label="路由名">
-          <n-input v-model:value="formData.name" />
+        <n-form-item label="附加数据" v-if="formData.type !== 'PARENT'">
+          <n-input v-model:value="formData.data" />
         </n-form-item>
         <n-button type="primary" @click="onFormSubmit">提交</n-button>
       </n-form>
+      <p>{{ formData }}</p>
     </n-drawer-content>
   </n-drawer>
 </template>
