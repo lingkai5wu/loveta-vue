@@ -4,7 +4,8 @@ import { Add, BuildOutline, TrashBinOutline } from '@vicons/ionicons5'
 defineProps({
   onAdd: Function,
   onEdit: Function,
-  onDelete: Function
+  onDelete: Function,
+  hasChildren: Boolean
 })
 </script>
 
@@ -26,7 +27,7 @@ defineProps({
     </n-button>
     <n-popover v-if="onDelete" trigger="click" placement="left">
       <template #trigger>
-        <n-button secondary circle type="error">
+        <n-button secondary circle type="error" :disabled="hasChildren">
           <template #icon>
             <n-icon>
               <TrashBinOutline />

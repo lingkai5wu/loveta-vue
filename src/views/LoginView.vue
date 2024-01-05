@@ -18,6 +18,15 @@ function onLogin() {
     router.push('/')
   })
 }
+
+function onRegister() {
+  request.post('/auth/register', formData.value).then((result) => {
+    tokenStore.setToken(result.data)
+    window.$message.success('注册成功')
+    console.log(tokenStore.name, tokenStore.value)
+    router.push('/')
+  })
+}
 </script>
 
 <template>
@@ -36,7 +45,7 @@ function onLogin() {
         <n-form-item>
           <n-button type="primary" @click="onLogin">登录</n-button>
         </n-form-item>
-        <n-button>注册</n-button>
+        <n-button @click="onRegister">注册</n-button>
       </n-form>
     </n-card>
   </div>

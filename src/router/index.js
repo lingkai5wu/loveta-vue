@@ -1,6 +1,7 @@
+import { listCurUserMenu } from '@/api/menu.js'
 import { useMenuStore } from '@/stores/menu.js'
 import { useTokenStore } from '@/stores/token.js'
-import { fetchMenuAndRemoveUnauthorizedRoutes } from '@/utils/menu.js'
+import { buildMenuTree, removeUnauthorizedRoutes } from '@/utils/menu.js'
 import BaseLayout from '@/views/BaseLayout.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -23,6 +24,11 @@ const router = createRouter({
           path: '/menu',
           name: 'menu',
           component: () => import('@/views/MenuList.vue')
+        },
+        {
+          path: '/test',
+          name: 'test',
+          component: () => import('@/views/TestView.vue')
         }
       ]
     },
@@ -48,7 +54,9 @@ router.beforeEach(async (to) => {
     if (to.path === '/login') {
       return true
     }
-    menuStore.menuOptions = await fetchMenuAndRemoveUnauthorizedRoutes()
+    const result = await listCurUserMenu()
+    removeUnauthorizedRoutes(result.data)
+    menuStore.menuOptions = buildMenuTree(result.data)
     // 想访问的路由可能被 remove
     if (!router.hasRoute(to.name)) {
       return '/'

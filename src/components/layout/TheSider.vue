@@ -11,11 +11,10 @@ function renderMenuLabel(option) {
   if (option.href) {
     return h('a', { href: option.href, target: '_blank' }, option.label)
   }
-  // 叶子节点，路由
-  if (!option.children) {
+  // 路由
+  if (option.path) {
     return h(RouterLink, { to: { name: option.name } }, { default: () => option.label })
   }
-  // 非叶子节点，父菜单
   return option.label
 }
 

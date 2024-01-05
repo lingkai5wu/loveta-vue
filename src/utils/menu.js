@@ -1,7 +1,7 @@
 import router from '@/router'
-import request from '@/utils/request'
 
-function removeUnauthorizedRoutes(set) {
+export function removeUnauthorizedRoutes(menus) {
+  const set = new Set(menus.map((menu) => menu.name))
   const routes = router.getRoutes()
   routes.forEach((item) => {
     if (item.name && !set.has(item.name)) {
@@ -10,7 +10,7 @@ function removeUnauthorizedRoutes(set) {
   })
 }
 
-function buildMenuTree(menus, pid = 0) {
+export function buildMenuTree(menus, pid = 0) {
   const routes = router.getRoutes()
   const result = []
   for (const menu of menus) {
@@ -32,11 +32,4 @@ function buildMenuTree(menus, pid = 0) {
     }
   }
   return result
-}
-
-export async function fetchMenuAndRemoveUnauthorizedRoutes() {
-  const result = await request.get('/menu')
-  const menuNameSet = new Set(result.data.map((item) => item.name))
-  removeUnauthorizedRoutes(menuNameSet)
-  return buildMenuTree(result.data)
 }
