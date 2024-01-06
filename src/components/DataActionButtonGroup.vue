@@ -11,23 +11,23 @@ defineProps({
 
 <template>
   <n-space>
-    <n-button v-if="onAdd" secondary circle type="info" @click="onAdd">
+    <n-button v-if="onAdd" circle secondary type="info" @click="onAdd">
       <template #icon>
         <n-icon>
           <Add />
         </n-icon>
       </template>
     </n-button>
-    <n-button v-if="onEdit" secondary circle type="warning" @click="onEdit">
+    <n-button v-if="onEdit" circle secondary type="warning" @click="onEdit">
       <template #icon>
         <n-icon>
           <BuildOutline />
         </n-icon>
       </template>
     </n-button>
-    <n-popover v-if="onDelete" trigger="click" placement="left">
+    <n-popover v-if="onDelete" placement="left" trigger="click">
       <template #trigger>
-        <n-button secondary circle type="error" :disabled="hasChildren">
+        <n-button :disabled="hasChildren" circle secondary type="error">
           <template #icon>
             <n-icon>
               <TrashBinOutline />
@@ -35,7 +35,7 @@ defineProps({
           </template>
         </n-button>
       </template>
-      <n-button type="error" @click="onDelete" size="small">确认删除</n-button>
+      <n-button size="small" type="error" @click="onDelete">确认删除</n-button>
     </n-popover>
   </n-space>
 </template>

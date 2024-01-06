@@ -97,8 +97,8 @@ function formSubmitSuccess(message) {
     <n-data-table
       :columns="columns"
       :data="tableData"
-      :row-key="(row) => row.id"
       :loading="tableLoading"
+      :row-key="(row) => row.id"
     />
   </n-space>
   <n-drawer v-model:show="isDrawerShow" :width="502">
@@ -107,8 +107,8 @@ function formSubmitSuccess(message) {
         <n-form-item label="根菜单">
           <n-switch
             v-model:value="formData.pid"
-            :round="false"
             :checked-value="0"
+            :round="false"
             :unchecked-value="null"
           />
         </n-form-item>
@@ -119,13 +119,13 @@ function formSubmitSuccess(message) {
             <n-radio-button label="链接" value="LINK" />
           </n-radio-group>
         </n-form-item>
-        <n-form-item label="上级菜单" v-if="formData.pid !== 0">
+        <n-form-item v-if="formData.pid !== 0" label="上级菜单">
           <n-tree-select v-model:value="formData.pid" :options="tableData" key-field="id" />
         </n-form-item>
         <n-form-item label="菜单名">
           <n-input v-model:value="formData.label" />
         </n-form-item>
-        <n-form-item label="附加数据" v-if="formData.type !== 'PARENT'">
+        <n-form-item v-if="formData.type !== 'PARENT'" label="附加数据">
           <n-input v-model:value="formData.data" />
         </n-form-item>
         <n-button type="primary" @click="onFormSubmit">提交</n-button>

@@ -28,9 +28,9 @@ function renderMenuExtra(menuOption) {
 <template>
   <n-menu
     :options="menuStore.menuOptions"
-    key-field="id"
-    :render-label="renderMenuLabel"
     :render-extra="renderMenuExtra"
+    :render-label="renderMenuLabel"
+    key-field="id"
   />
 </template>
 
