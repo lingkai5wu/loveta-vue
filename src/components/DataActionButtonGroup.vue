@@ -10,7 +10,7 @@ defineProps({
 </script>
 
 <template>
-  <n-space>
+  <n-flex>
     <n-button v-if="onAdd" circle secondary type="info" @click="onAdd">
       <template #icon>
         <n-icon>
@@ -37,7 +37,7 @@ defineProps({
       </template>
       <n-button size="small" type="error" @click="onDelete">确认删除</n-button>
     </n-popover>
-  </n-space>
+  </n-flex>
 </template>
 
 <style scoped></style>

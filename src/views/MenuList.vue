@@ -58,13 +58,9 @@ function onAdd(row) {
 function onEdit(row) {
   isDrawerShow.value = true
   drawerTitle.value = '编辑菜单'
-  formData.value = {
-    id: row.id,
-    pid: row.pid,
-    type: row.type,
-    label: row.label,
-    data: row.data
-  }
+  // eslint-disable-next-line no-unused-vars
+  const { children, ...targetObj } = row
+  formData.value = targetObj
   onFormSubmit = () => {
     updateMenu(formData.value).then(() => formSubmitSuccess('更新成功'))
   }

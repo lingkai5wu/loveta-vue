@@ -11,10 +11,10 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "axios": "^1.6.3",
+    "axios": "^1.6.5",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
-    "vue": "^3.4.3",
+    "vue": "^3.4.7",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
@@ -24,11 +24,11 @@
     "@vue/eslint-config-prettier": "^8.0.0",
     "eslint": "^8.56.0",
     "eslint-plugin-vue": "^9.19.2",
-    "naive-ui": "^2.36.0",
+    "naive-ui": "^2.37.3",
     "prettier": "^3.1.1",
     "unplugin-auto-import": "^0.17.3",
     "unplugin-vue-components": "^0.26.0",
     "vfonts": "^0.0.3",
-    "vite": "^5.0.10"
+    "vite": "^5.0.11"
   }
 }

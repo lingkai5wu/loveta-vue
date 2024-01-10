@@ -4,6 +4,8 @@ import { useTokenStore } from '@/stores/token.js'
 import { buildMenuTree, removeUnauthorizedRoutes } from '@/utils/menu.js'
 import BaseLayout from '@/views/BaseLayout.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/user.js'
+import { getUser } from '@/api/user.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +31,11 @@ const router = createRouter({
           path: '/test',
           name: 'test',
           component: () => import('@/views/TestView.vue')
+        },
+        {
+          path: '/user',
+          name: 'user',
+          component: () => import('@/views/UserList.vue')
         }
       ]
     },
@@ -69,6 +76,11 @@ router.beforeEach(async (to) => {
     }
   }
 
+  const userStore = useUserStore()
+  if (!userStore.info) {
+    userStore.info = (await getUser()).data
+    console.log('getUser', userStore.info)
+  }
   window.$loading.finish()
   return true
 })
