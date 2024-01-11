@@ -21,7 +21,7 @@ export function buildMenuTree(menus, pid = 0) {
   for (const menu of menus) {
     if (menu.pid === pid) {
       let curMenu = { ...menu }
-      if (menu.type === 1) {
+      if (menu.type === "ROUTE") {
         const curRoute = routes.find((route) => route.name === menu.data)
         if (curRoute) {
           curMenu = {

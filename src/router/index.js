@@ -55,7 +55,6 @@ router.beforeEach(async (to) => {
   // 已登录时访问登录页，跳转到首页
   const tokenStore = useTokenStore()
   if (to.path === '/login' && tokenStore.value) {
-    window.$loading.finish()
     return '/'
   }
 
@@ -63,7 +62,6 @@ router.beforeEach(async (to) => {
   const menuStore = useMenuStore()
   if (menuStore.menuOptions.length === 0) {
     if (to.path === '/login') {
-      window.$loading.finish()
       return true
     }
     const result = await listCurUserMenu()
@@ -71,8 +69,7 @@ router.beforeEach(async (to) => {
     menuStore.menuOptions = buildMenuTree(result.data)
     // 想访问的路由可能被 remove
     if (!router.hasRoute(to.name)) {
-      window.$loading.finish()
-      return '/'
+      return to
     }
   }
 

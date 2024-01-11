@@ -9,7 +9,7 @@ const menuStore = useMenuStore()
 function renderMenuLabel(menuOption) {
   switch (menuOption.type) {
     case 'ROUTE':
-      return h(RouterLink, { to: { name: menuOption.data } }, { default: () => menuOption.label })
+      return h(RouterLink, { to: menuOption.path || '' }, { default: () => menuOption.label })
     case 'LINK':
       return h('a', { href: menuOption.data, target: '_blank' }, menuOption.label)
     default:
