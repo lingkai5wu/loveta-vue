@@ -1,5 +1,5 @@
 <script setup>
-import { listUsers } from '@/api/user.js'
+import { listUserVOs } from '@/api/user.js'
 import BaseTagList from '@/components/BaseTagList.vue'
 
 const columns = ref([
@@ -23,8 +23,7 @@ getTableData()
 
 async function getTableData() {
   tableLoading.value = true
-  const result = await listUsers()
-  tableData.value = result.data
+  tableData.value = (await listUserVOs()).data
   tableLoading.value = false
 }
 </script>

@@ -1,11 +1,11 @@
-import { listCurUserMenu } from '@/api/menu.js'
+import { listCurrentUserMenus } from '@/api/menu.js'
 import { useMenuStore } from '@/stores/menu.js'
-import { useTokenStore } from '@/stores/token.js'
+import { useAuthStore } from '@/stores/auth.js'
 import { buildMenuTree, removeUnauthorizedRoutes } from '@/utils/menu.js'
 import BaseLayout from '@/views/BaseLayout.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores/user.js'
-import { getUser } from '@/api/user.js'
+import { getCurrentUserVO } from '@/api/user.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,8 +53,8 @@ router.beforeEach(async (to) => {
   window.$loading.start()
 
   // 已登录时访问登录页，跳转到首页
-  const tokenStore = useTokenStore()
-  if (to.path === '/login' && tokenStore.value) {
+  const authStore = useAuthStore()
+  if (to.path === '/login' && authStore.token) {
     return '/'
   }
 
@@ -62,9 +62,10 @@ router.beforeEach(async (to) => {
   const menuStore = useMenuStore()
   if (menuStore.menuOptions.length === 0) {
     if (to.path === '/login') {
+      window.$loading.finish()
       return true
     }
-    const result = await listCurUserMenu()
+    const result = await listCurrentUserMenus()
     removeUnauthorizedRoutes(result.data)
     menuStore.menuOptions = buildMenuTree(result.data)
     // 想访问的路由可能被 remove
@@ -74,9 +75,9 @@ router.beforeEach(async (to) => {
   }
 
   const userStore = useUserStore()
-  if (!userStore.info) {
-    getUser().then((result) => {
-      userStore.info = result.data
+  if (!userStore.currentUserVO) {
+    getCurrentUserVO().then((result) => {
+      userStore.currentUserVO = result.data
     })
   }
   window.$loading.finish()

@@ -1,16 +1,16 @@
 import router from '@/router'
 
 export function removeUnauthorizedRoutes(menus) {
-  const set = menus.reduce((set, obj) => {
-    if (obj.type === 'ROUTE') {
-      set.add(obj.data)
+  const menuNameSet = menus.reduce((set, menu) => {
+    if (menu.type === 'ROUTE') {
+      set.add(menu.target)
     }
     return set
   }, new Set())
   const routes = router.getRoutes()
-  routes.forEach((item) => {
-    if (item.name && !set.has(item.name)) {
-      router.removeRoute(item.name)
+  routes.forEach((route) => {
+    if (route.name && !menuNameSet.has(route.name)) {
+      router.removeRoute(route.name)
     }
   })
 }
@@ -21,8 +21,8 @@ export function buildMenuTree(menus, pid = 0) {
   for (const menu of menus) {
     if (menu.pid === pid) {
       let curMenu = { ...menu }
-      if (menu.type === "ROUTE") {
-        const curRoute = routes.find((route) => route.name === menu.data)
+      if (menu.type === 'ROUTE') {
+        const curRoute = routes.find((route) => route.name === menu.target)
         if (curRoute) {
           curMenu = {
             ...menu,

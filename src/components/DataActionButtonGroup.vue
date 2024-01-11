@@ -3,22 +3,31 @@ import { Add, BuildOutline, TrashBinOutline } from '@vicons/ionicons5'
 
 defineProps({
   onAdd: Function,
+  isAddDisabled: Boolean,
   onEdit: Function,
+  isEditDisabled: Boolean,
   onDelete: Function,
-  hasChildren: Boolean
+  isDeleteDisabled: Boolean
 })
 </script>
 
 <template>
   <n-flex>
-    <n-button v-if="onAdd" circle secondary type="info" @click="onAdd">
+    <n-button v-if="onAdd" :disabled="isAddDisabled" circle secondary type="info" @click="onAdd">
       <template #icon>
         <n-icon>
           <Add />
         </n-icon>
       </template>
     </n-button>
-    <n-button v-if="onEdit" circle secondary type="warning" @click="onEdit">
+    <n-button
+      v-if="onEdit"
+      :disabled="isEditDisabled"
+      circle
+      secondary
+      type="warning"
+      @click="onEdit"
+    >
       <template #icon>
         <n-icon>
           <BuildOutline />
@@ -27,7 +36,7 @@ defineProps({
     </n-button>
     <n-popover v-if="onDelete" placement="left" trigger="click">
       <template #trigger>
-        <n-button :disabled="hasChildren" circle secondary type="error">
+        <n-button :disabled="isDeleteDisabled" circle secondary type="error">
           <template #icon>
             <n-icon>
               <TrashBinOutline />

@@ -11,7 +11,7 @@ function renderMenuLabel(menuOption) {
     case 'ROUTE':
       return h(RouterLink, { to: menuOption.path || '' }, { default: () => menuOption.label })
     case 'LINK':
-      return h('a', { href: menuOption.data, target: '_blank' }, menuOption.label)
+      return h('a', { href: menuOption.target, target: '_blank' }, menuOption.label)
     default:
       return menuOption.label
   }

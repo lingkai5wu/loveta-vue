@@ -1,5 +1,5 @@
 <script setup>
-import { listMenu, removeMenu, saveMenu, updateMenu } from '@/api/menu.js'
+import { listMenus, removeMenu, saveMenu, updateMenu } from '@/api/menu.js'
 import DataActionButtonGroup from '@/components/DataActionButtonGroup.vue'
 import { buildMenuTree } from '@/utils/menu.js'
 import { Add } from '@vicons/ionicons5'
@@ -7,16 +7,17 @@ import { Add } from '@vicons/ionicons5'
 const columns = ref([
   { title: '菜单名', key: 'label' },
   { title: '菜单类型', key: 'type' },
-  { title: '附加数据', key: 'data' },
+  { title: '跳转目标', key: 'target' },
   {
     title: '操作',
     key: 'actions',
     render(row) {
       return h(DataActionButtonGroup, {
         onAdd: () => onAdd(row),
+        isAddDisabled: row.type !== 'PARENT',
         onEdit: () => onEdit(row),
         onDelete: () => onDelete(row),
-        hasChildren: row.children !== undefined
+        isDeleteDisabled: row.children !== undefined
       })
     }
   }
@@ -27,8 +28,7 @@ getTableData()
 
 async function getTableData() {
   tableLoading.value = true
-  const result = await listMenu()
-  tableData.value = buildMenuTree(result.data)
+  tableData.value = buildMenuTree((await listMenus()).data)
   tableLoading.value = false
 }
 
@@ -115,9 +115,9 @@ function formSubmitSuccess(message) {
         <n-form-item label="菜单名">
           <n-input v-model:value="formData.label" />
         </n-form-item>
-        <n-form-item v-if="formData.type !== 'PARENT'" label="附加数据">
+        <n-form-item v-if="formData.type !== 'PARENT'" label="跳转目标">
           <n-input
-            v-model:value="formData.data"
+            v-model:value="formData.target"
             :autosize="{
               minRows: 1
             }"

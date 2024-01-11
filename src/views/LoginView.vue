@@ -1,29 +1,27 @@
 <script setup>
 import router from '@/router'
-import { useTokenStore } from '@/stores/token.js'
-import request from '@/utils/request.js'
+import { useAuthStore } from '@/stores/auth.js'
+import { login, register } from '@/api/auth.js'
 
 const formData = ref({
   phone: '18888888888',
   password: '123456'
 })
 
-const tokenStore = useTokenStore()
+const authStore = useAuthStore()
 
 function onLogin() {
-  request.post('/auth/login', formData.value).then((result) => {
-    tokenStore.setToken(result.data)
+  login(formData.value).then((result) => {
+    authStore.token = result.data
     window.$message.success('登录成功')
-    console.log(tokenStore.name, tokenStore.value)
     router.push('/')
   })
 }
 
 function onRegister() {
-  request.post('/auth/register', formData.value).then((result) => {
-    tokenStore.setToken(result.data)
+  register(formData.value).then((result) => {
+    authStore.token = result.data
     window.$message.success('注册成功')
-    console.log(tokenStore.name, tokenStore.value)
     router.push('/')
   })
 }
