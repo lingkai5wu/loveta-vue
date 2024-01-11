@@ -78,8 +78,9 @@ router.beforeEach(async (to) => {
 
   const userStore = useUserStore()
   if (!userStore.info) {
-    userStore.info = (await getUser()).data
-    console.log('getUser', userStore.info)
+    getUser().then((result) => {
+      userStore.info = result.data
+    })
   }
   window.$loading.finish()
   return true

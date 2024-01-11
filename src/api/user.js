@@ -1,6 +1,6 @@
 import request from '@/utils/request.js'
 
-export async function getUser(){
+export async function getUser() {
   return await request.get('/user')
 }
 

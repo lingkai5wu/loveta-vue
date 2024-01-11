@@ -6,18 +6,13 @@ const baseURL = '/api'
 const instance = axios.create({ baseURL })
 const errMsg = '服务异常'
 
-instance.interceptors.request.use(
-  (config) => {
-    const tokenStore = useTokenStore()
-    if (tokenStore.value) {
-      config.headers[tokenStore.name] = tokenStore.value
-    }
-    return config
-  },
-  (err) => {
-    return Promise.reject(err)
+instance.interceptors.request.use((config) => {
+  const tokenStore = useTokenStore()
+  if (tokenStore.value) {
+    config.headers[tokenStore.name] = tokenStore.value
   }
-)
+  return config
+})
 
 instance.interceptors.response.use(
   (result) => {
@@ -31,10 +26,12 @@ instance.interceptors.response.use(
       router.push('/login')
     }
     window.$message.error(result.data.msg || errMsg)
+    window.$loading.error()
     return Promise.reject(result.data)
   },
   (err) => {
     window.$message.error(errMsg)
+    window.$loading.error()
     return Promise.reject(err)
   }
 )

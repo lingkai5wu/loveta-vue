@@ -34,13 +34,7 @@ async function getTableData() {
 
 const isDrawerShow = ref(false)
 const drawerTitle = ref('')
-const formData = ref({
-  pid: 0,
-  id: 0,
-  type: 0,
-  label: '',
-  data: ''
-})
+const formData = ref()
 let onFormSubmit
 
 function onAdd(row) {
@@ -108,6 +102,9 @@ function formSubmitSuccess(message) {
             :unchecked-value="null"
           />
         </n-form-item>
+        <n-form-item v-if="formData.pid !== 0" label="上级菜单">
+          <n-tree-select v-model:value="formData.pid" :options="tableData" key-field="id" />
+        </n-form-item>
         <n-form-item label="菜单类型">
           <n-radio-group v-model:value="formData.type">
             <n-radio-button label="父菜单" value="PARENT" />
@@ -115,14 +112,17 @@ function formSubmitSuccess(message) {
             <n-radio-button label="链接" value="LINK" />
           </n-radio-group>
         </n-form-item>
-        <n-form-item v-if="formData.pid !== 0" label="上级菜单">
-          <n-tree-select v-model:value="formData.pid" :options="tableData" key-field="id" />
-        </n-form-item>
         <n-form-item label="菜单名">
           <n-input v-model:value="formData.label" />
         </n-form-item>
         <n-form-item v-if="formData.type !== 'PARENT'" label="附加数据">
-          <n-input v-model:value="formData.data" />
+          <n-input
+            v-model:value="formData.data"
+            :autosize="{
+              minRows: 1
+            }"
+            type="textarea"
+          />
         </n-form-item>
         <n-button type="primary" @click="onFormSubmit">提交</n-button>
       </n-form>
