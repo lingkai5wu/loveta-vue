@@ -1,7 +1,7 @@
 <script setup>
 import { listMenus, removeMenu, saveMenu, updateMenu } from '@/api/menu.js'
 import DataActionButtonGroup from '@/components/DataActionButtonGroup.vue'
-import { buildMenuTree } from '@/utils/menu.js'
+import { generateMenuOptions } from '@/utils/menu.js'
 import { Add } from '@vicons/ionicons5'
 
 const columns = ref([
@@ -28,7 +28,7 @@ getTableData()
 
 async function getTableData() {
   tableLoading.value = true
-  tableData.value = buildMenuTree((await listMenus()).data)
+  tableData.value = generateMenuOptions((await listMenus()).data)
   tableLoading.value = false
 }
 
