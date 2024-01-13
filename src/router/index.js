@@ -1,7 +1,5 @@
 import BaseLayout from '@/views/BaseLayout.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import { setupRouterGuards } from '@/router/guards/index.js'
-import { setupRouterRoutes } from '@/utils/route.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,11 +39,5 @@ const router = createRouter({
     }
   ]
 })
-
-export function setupRouter(app) {
-  setupRouterRoutes(router)
-  setupRouterGuards(router)
-  app.use(router)
-}
 
 export default router
