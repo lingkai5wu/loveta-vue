@@ -2,6 +2,7 @@
 import router from '@/router'
 import { useAuthStore } from '@/stores/auth.js'
 import { login, register } from '@/api/auth.js'
+import { initRuntimeData } from '@/utils/init.js'
 
 const formData = ref({
   phone: '18888888888',
@@ -11,9 +12,10 @@ const formData = ref({
 const authStore = useAuthStore()
 
 function onLogin() {
-  login(formData.value).then((result) => {
+  login(formData.value).then(async (result) => {
     authStore.token = result.data
     window.$message.success('登录成功')
+    await initRuntimeData()
     router.push('/')
   })
 }
@@ -22,7 +24,6 @@ function onRegister() {
   register(formData.value).then((result) => {
     authStore.token = result.data
     window.$message.success('注册成功')
-    router.push('/')
   })
 }
 </script>

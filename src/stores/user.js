@@ -1,8 +1,14 @@
 import { defineStore } from 'pinia'
 
 export const useUserStore = defineStore('user', () => {
-  const currentUserVO = ref()
+  const userVO = ref()
+
+  function setUserVO(userVO) {
+    this.userVO = userVO
+  }
+
   return {
-    currentUserVO
+    userVO,
+    setUserVO
   }
 })

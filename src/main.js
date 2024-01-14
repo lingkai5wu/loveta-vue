@@ -1,10 +1,18 @@
 import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
-import { setupRouter, setupStore } from '@/utils/setup.js'
+import router from '@/router/index.js'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import { initRuntimeData } from '@/utils/init.js'
 
 const app = createApp(App)
-setupStore(app)
-setupRouter(app)
+
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia)
+
+await initRuntimeData()
+app.use(router)
 
 app.mount('#app')

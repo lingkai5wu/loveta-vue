@@ -6,7 +6,7 @@ const userStore = useUserStore()
 
 <template>
   <h2>我是Dashboard</h2>
-  <p>{{ userStore.currentUserVO }}</p>
+  <p>{{ userStore.userVO }}</p>
 </template>
 
 <style scoped></style>

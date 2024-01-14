@@ -7,6 +7,7 @@ import { Add } from '@vicons/ionicons5'
 const columns = ref([
   { title: '菜单名', key: 'label' },
   { title: '菜单类型', key: 'type' },
+  { title: '路由路径', key: 'path' },
   { title: '跳转目标', key: 'target' },
   {
     title: '操作',
@@ -112,10 +113,14 @@ function formSubmitSuccess(message) {
             <n-radio-button label="链接" value="LINK" />
           </n-radio-group>
         </n-form-item>
-        <n-form-item label="菜单名">
+        <n-form-item label="标签">
           <n-input v-model:value="formData.label" />
         </n-form-item>
-        <n-form-item v-if="formData.type !== 'PARENT'" label="跳转目标">
+        <!-- TODO 图标 -->
+        <n-form-item v-if="formData.type !== 'PARENT'" label="路径">
+          <n-input v-model:value="formData.path" />
+        </n-form-item>
+        <n-form-item v-if="formData.type === 'ROUTE'" label="组件">
           <n-input
             v-model:value="formData.target"
             :autosize="{
