@@ -1,6 +1,6 @@
 <script setup>
 import { listUserVOs } from '@/api/user.js'
-import BaseTagList from '@/components/BaseTagList.vue'
+import BaseTagList from '@/components/common/BaseTagList.vue'
 
 const columns = ref([
   { title: 'ID', key: 'id' },

@@ -1,6 +1,6 @@
 <script setup>
 import { listMenus, removeMenu, saveMenu, updateMenu } from '@/api/menu.js'
-import DataActionButtonGroup from '@/components/DataActionButtonGroup.vue'
+import DataActionButtonGroup from '@/components/table/DataTableActionButtonGroup.vue'
 import { generateMenuOptions } from '@/utils/menu.js'
 import { Add } from '@vicons/ionicons5'
 
