@@ -13,9 +13,9 @@ export const useOssStore = defineStore('oss', () => {
     if (!directPostObjectInfoPromise) {
       directPostObjectInfoPromise = new Promise((resolve) => {
         getDirectPostObjectInfo()
-          .then((result) => {
-            directPostObjectInfo.value = result.data
-            resolve(result.data)
+          .then((data) => {
+            directPostObjectInfo.value = data
+            resolve(data)
           })
           .finally(() => {
             directPostObjectInfoPromise = null

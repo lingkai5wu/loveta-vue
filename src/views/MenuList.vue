@@ -29,7 +29,7 @@ getTableData()
 
 async function getTableData() {
   tableLoading.value = true
-  tableData.value = generateMenuOptions((await listMenus()).data)
+  tableData.value = generateMenuOptions(await listMenus())
   tableLoading.value = false
 }
 

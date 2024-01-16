@@ -17,7 +17,7 @@ instance.interceptors.request.use((config) => {
 instance.interceptors.response.use(
   (result) => {
     if (result.data.code === 200) {
-      return result.data
+      return result.data.data
     }
 
     if (result.data.code === 401) {

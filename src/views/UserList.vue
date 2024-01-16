@@ -23,7 +23,7 @@ getTableData()
 
 async function getTableData() {
   tableLoading.value = true
-  tableData.value = (await listUserVOs()).data
+  tableData.value = await listUserVOs()
   tableLoading.value = false
 }
 </script>

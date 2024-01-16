@@ -15,8 +15,8 @@ const authStore = useAuthStore()
 function onLogin() {
   isLoginLoading.value = true
   login(formData.value)
-    .then(async (result) => {
-      authStore.token = result.data
+    .then(async (data) => {
+      authStore.token = data
       await initRuntimeData()
       window.$message.success('登录成功')
       router.push('/')
@@ -29,8 +29,8 @@ function onLogin() {
 function onRegister() {
   isRegisterLoading.value = true
   register(formData.value)
-    .then((result) => {
-      authStore.token = result.data
+    .then((data) => {
+      authStore.token = data
       window.$message.success('注册成功')
     })
     .finally(() => {
@@ -58,11 +58,11 @@ function onRegister() {
             :loading="isLoginLoading"
             type="primary"
             @click="onLogin"
-            >登录
+          >登录
           </n-button>
         </n-form-item>
         <n-button :disabled="isLoginLoading" :loading="isRegisterLoading" @click="onRegister"
-          >注册
+        >注册
         </n-button>
       </n-form>
     </n-card>

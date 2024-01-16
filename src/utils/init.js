@@ -16,11 +16,11 @@ export async function initRuntimeData() {
     return
   }
 
-  useUserStore().setUserVO((await getCurrentUserVO()).data)
+  useUserStore().setUserVO(await getCurrentUserVO())
 
-  const userMenusResult = await listCurrentUserMenus()
-  addRoutesFromMenus(router, userMenusResult.data)
-  useMenuStore().setMenuOptions(userMenusResult.data)
+  const userMenus = await listCurrentUserMenus()
+  addRoutesFromMenus(router, userMenus)
+  useMenuStore().setMenuOptions(userMenus)
 }
 
 export function initNaiveUIDiscreteApi() {
