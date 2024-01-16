@@ -26,12 +26,12 @@ instance.interceptors.response.use(
       router.push('/login')
     }
     window.$message.error(result.data.msg || errMsg)
-    window.$loading.error()
+    window.$loadingBar.error()
     return Promise.reject(result.data)
   },
   (err) => {
     window.$message.error(errMsg)
-    window.$loading.error()
+    window.$loadingBar.error()
     return Promise.reject(err)
   }
 )

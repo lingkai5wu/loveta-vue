@@ -1,13 +1,13 @@
 export function createLoadingBarGuard(router) {
   router.beforeEach(() => {
-    window.$loading.start()
+    window.$loadingBar.start()
   })
 
   router.afterEach(() => {
-    window.$loading.finish()
+    window.$loadingBar.finish()
   })
 
   router.onError(() => {
-    window.$loading.error()
+    window.$loadingBar.error()
   })
 }

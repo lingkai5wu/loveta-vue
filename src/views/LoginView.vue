@@ -8,23 +8,34 @@ const formData = ref({
   phone: '18888888888',
   password: '123456'
 })
-
+const isLoginLoading = ref(false)
+const isRegisterLoading = ref(false)
 const authStore = useAuthStore()
 
 function onLogin() {
-  login(formData.value).then(async (result) => {
-    authStore.token = result.data
-    window.$message.success('登录成功')
-    await initRuntimeData()
-    router.push('/')
-  })
+  isLoginLoading.value = true
+  login(formData.value)
+    .then(async (result) => {
+      authStore.token = result.data
+      await initRuntimeData()
+      window.$message.success('登录成功')
+      router.push('/')
+    })
+    .finally(() => {
+      isLoginLoading.value = false
+    })
 }
 
 function onRegister() {
-  register(formData.value).then((result) => {
-    authStore.token = result.data
-    window.$message.success('注册成功')
-  })
+  isRegisterLoading.value = true
+  register(formData.value)
+    .then((result) => {
+      authStore.token = result.data
+      window.$message.success('注册成功')
+    })
+    .finally(() => {
+      isRegisterLoading.value = false
+    })
 }
 </script>
 
@@ -42,9 +53,17 @@ function onRegister() {
           <n-input v-model:value="formData.password" type="password" />
         </n-form-item>
         <n-form-item>
-          <n-button type="primary" @click="onLogin">登录</n-button>
+          <n-button
+            :disabled="isRegisterLoading"
+            :loading="isLoginLoading"
+            type="primary"
+            @click="onLogin"
+            >登录
+          </n-button>
         </n-form-item>
-        <n-button @click="onRegister">注册</n-button>
+        <n-button :disabled="isLoginLoading" :loading="isRegisterLoading" @click="onRegister"
+          >注册</n-button
+        >
       </n-form>
     </n-card>
   </div>

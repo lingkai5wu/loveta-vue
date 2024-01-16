@@ -1,9 +1,19 @@
-<script setup></script>
+<script setup>
+import { logout } from '@/api/auth.js'
+import router from '@/router/index.js'
+
+function onLogout() {
+  logout().then(() => {
+    router.push('/login')
+    window.$message.success('登出成功')
+  })
+}
+</script>
 
 <template>
   <n-page-header>
     <template #title>
-      <h2>我是顶栏</h2>
+      <n-button round secondary type="warning" @click="onLogout">登出</n-button>
     </template>
   </n-page-header>
 </template>

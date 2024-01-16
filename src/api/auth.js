@@ -7,3 +7,7 @@ export async function login(data) {
 export async function register(data) {
   return await request.post('/auth/register', data)
 }
+
+export async function logout() {
+  return await request.get('/auth/logout')
+}
