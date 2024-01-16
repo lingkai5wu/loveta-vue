@@ -62,8 +62,8 @@ function onRegister() {
           </n-button>
         </n-form-item>
         <n-button :disabled="isLoginLoading" :loading="isRegisterLoading" @click="onRegister"
-          >注册</n-button
-        >
+          >注册
+        </n-button>
       </n-form>
     </n-card>
   </div>

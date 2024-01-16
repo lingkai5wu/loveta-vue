@@ -13,7 +13,6 @@ export async function initRuntimeData() {
     if (route.path !== '/login') {
       await router.replace('/login')
     }
-    console.log('init失败')
     return
   }
 

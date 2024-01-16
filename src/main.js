@@ -6,14 +6,18 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { initNaiveUIDiscreteApi, initRuntimeData } from '@/utils/init.js'
 
-const app = createApp(App)
+async function init() {
+  const app = createApp(App)
 
-const pinia = createPinia()
-pinia.use(piniaPluginPersistedstate)
-app.use(pinia)
+  const pinia = createPinia()
+  pinia.use(piniaPluginPersistedstate)
+  app.use(pinia)
 
-initNaiveUIDiscreteApi()
-await initRuntimeData()
-app.use(router)
+  initNaiveUIDiscreteApi()
+  await initRuntimeData()
+  app.use(router)
 
-app.mount('#app')
+  app.mount('#app')
+}
+
+init().then(() => console.log('初始化成功'))

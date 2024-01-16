@@ -1,9 +1,11 @@
 <script setup>
 import { logout } from '@/api/auth.js'
 import router from '@/router/index.js'
+import { useAuthStore } from '@/stores/auth.js'
 
 function onLogout() {
   logout().then(() => {
+    useAuthStore().token = null
     router.push('/login')
     window.$message.success('登出成功')
   })
