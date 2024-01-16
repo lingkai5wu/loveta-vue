@@ -3,9 +3,9 @@ const baseTitle = 'LoveTA'
 
 export function createPageTitleGuard(router) {
   router.afterEach((to) => {
-    const pageTitle = to.meta?.title
+    const pageTitle = to.meta?.label
     if (pageTitle) {
-      document.title = `${pageTitle} | ${baseTitle}`
+      document.title = `${pageTitle} - ${baseTitle}`
     } else {
       document.title = baseTitle
     }
