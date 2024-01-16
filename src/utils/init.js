@@ -11,18 +11,16 @@ export async function initRuntimeData() {
   if (!useAuthStore().token) {
     const route = unref(router.currentRoute)
     if (route.path !== '/login') {
-      await router.replace('/login')
+      router.replace('/login')
     }
     return
   }
 
-  const [userMenusResult, userVOResult] = await Promise.all([
-    listCurrentUserMenus(),
-    getCurrentUserVO()
-  ])
+  useUserStore().setUserVO((await getCurrentUserVO()).data)
+
+  const userMenusResult = await listCurrentUserMenus()
   addRoutesFromMenus(router, userMenusResult.data)
   useMenuStore().setMenuOptions(userMenusResult.data)
-  useUserStore().setUserVO(userVOResult.data)
 }
 
 export function initNaiveUIDiscreteApi() {

@@ -1,4 +1,4 @@
-import router from '@/router'
+import router from '@/router/index.js'
 import { useAuthStore } from '@/stores/auth.js'
 import axios from 'axios'
 
@@ -23,7 +23,7 @@ instance.interceptors.response.use(
     if (result.data.code === 401) {
       const authStore = useAuthStore()
       authStore.token = null
-      router.push('/login')
+      router.replace('/login')
     }
     window.$message.error(result.data.msg || errMsg)
     window.$loadingBar.error()

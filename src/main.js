@@ -14,10 +14,14 @@ async function init() {
   app.use(pinia)
 
   initNaiveUIDiscreteApi()
-  await initRuntimeData()
+  try {
+    await initRuntimeData()
+  } catch (e) {
+    console.error(e)
+  }
   app.use(router)
 
   app.mount('#app')
 }
 
-init().then(() => console.log('初始化成功'))
+init().then()
