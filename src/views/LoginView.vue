@@ -58,11 +58,11 @@ function onRegister() {
             :loading="isLoginLoading"
             type="primary"
             @click="onLogin"
-          >登录
+            >登录
           </n-button>
         </n-form-item>
         <n-button :disabled="isLoginLoading" :loading="isRegisterLoading" @click="onRegister"
-        >注册
+          >注册
         </n-button>
       </n-form>
     </n-card>

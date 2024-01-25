@@ -1,99 +1,41 @@
 <script setup>
-import { listMenus, removeMenu, saveMenu, updateMenu } from '@/api/menu.js'
-import DataActionButtonGroup from '@/components/table/DataTableActionButtonGroup.vue'
+import { listMenus } from '@/api/menu.js'
 import { generateMenuOptions } from '@/utils/menu.js'
-import { Add } from '@vicons/ionicons5'
+import DataTable from '@/components/table/DataTable.vue'
 
 const columns = ref([
-  { title: '菜单名', key: 'label' },
-  { title: '菜单类型', key: 'type' },
-  { title: '路由路径', key: 'path' },
-  { title: '跳转目标', key: 'target' },
-  {
-    title: '操作',
-    key: 'actions',
-    render(row) {
-      return h(DataActionButtonGroup, {
-        onAdd: () => onAdd(row),
-        isAddDisabled: row.type !== 'PARENT',
-        onEdit: () => onEdit(row),
-        onDelete: () => onDelete(row),
-        isDeleteDisabled: row.children !== undefined
-      })
-    }
-  }
+  { title: '标签', key: 'label' },
+  { title: '类型', key: 'type' },
+  { title: '路径', key: 'path' },
+  { title: '组件', key: 'component' }
 ])
-const tableData = ref()
-const tableLoading = ref(false)
-getTableData()
-
-async function getTableData() {
-  tableLoading.value = true
-  tableData.value = generateMenuOptions(await listMenus())
-  tableLoading.value = false
-}
-
-const isDrawerShow = ref(false)
-const drawerTitle = ref('')
-const formData = ref()
-let onFormSubmit
-
-function onAdd(row) {
-  isDrawerShow.value = true
-  drawerTitle.value = '新增菜单'
-  formData.value = {
-    type: 'ROUTE',
-    pid: row ? row.id : 0
+const actions = ref({
+  add: {
+    fields: [
+      {
+        key: 'pid',
+        value: (row) => row.id
+      }
+    ]
+  },
+  edit: {
+    fields: [
+      'id',
+      'pid',
+      ...columns.value.map((column) => column.key)
+    ]
   }
-  onFormSubmit = () => {
-    saveMenu(formData.value).then(() => formSubmitSuccess('保存成功'))
-  }
-}
-
-function onEdit(row) {
-  isDrawerShow.value = true
-  drawerTitle.value = '编辑菜单'
-  // eslint-disable-next-line no-unused-vars
-  const { children, ...targetObj } = row
-  formData.value = targetObj
-  onFormSubmit = () => {
-    updateMenu(formData.value).then(() => formSubmitSuccess('更新成功'))
-  }
-}
-
-function onDelete(row) {
-  removeMenu(row.id).then(() => {
-    window.$message.success('删除成功')
-    getTableData()
-  })
-}
-
-function formSubmitSuccess(message) {
-  isDrawerShow.value = false
-  window.$message.success(message)
-  getTableData()
-}
+})
 </script>
 
 <template>
-  <n-space vertical>
-    <n-button round type="info" @click="onAdd(null)">
-      <template #icon>
-        <n-icon>
-          <Add />
-        </n-icon>
-      </template>
-      根菜单
-    </n-button>
-    <n-data-table
-      :columns="columns"
-      :data="tableData"
-      :loading="tableLoading"
-      :row-key="(row) => row.id"
-    />
-  </n-space>
-  <n-drawer v-model:show="isDrawerShow" :width="502">
-    <n-drawer-content :title="drawerTitle" closable>
+  <DataTable
+    :actions="actions"
+    :columns="columns"
+    :get-data-function="async () => generateMenuOptions(await listMenus())"
+    empty-name="菜单"
+  >
+    <template #drawer="{ formData, tableData }">
       <n-form :model="formData">
         <n-form-item label="根菜单">
           <n-switch
@@ -122,7 +64,7 @@ function formSubmitSuccess(message) {
         </n-form-item>
         <n-form-item v-if="formData.type === 'ROUTE'" label="组件">
           <n-input
-            v-model:value="formData.target"
+            v-model:value="formData.component"
             :autosize="{
               minRows: 1
             }"
@@ -131,9 +73,8 @@ function formSubmitSuccess(message) {
         </n-form-item>
         <n-button type="primary" @click="onFormSubmit">提交</n-button>
       </n-form>
-      <p>{{ formData }}</p>
-    </n-drawer-content>
-  </n-drawer>
+    </template>
+  </DataTable>
 </template>
 
 <style scoped></style>

@@ -13,11 +13,13 @@ function onLogout() {
 </script>
 
 <template>
-  <n-page-header>
-    <template #title>
-      <n-button round secondary type="warning" @click="onLogout">登出</n-button>
-    </template>
+  <n-page-header class="header">
+    <n-button round secondary type="warning" @click="onLogout">登出</n-button>
   </n-page-header>
 </template>
 
-<style scoped></style>
+<style scoped>
+.header {
+  padding: 10px;
+}
+</style>

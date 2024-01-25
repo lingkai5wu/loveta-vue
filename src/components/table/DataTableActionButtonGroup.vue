@@ -1,52 +1,53 @@
 <script setup>
-import { Add, BuildOutline, TrashBinOutline } from '@vicons/ionicons5'
+import { Add, BuildOutline, EyeOutline, TrashBinOutline } from '@vicons/ionicons5'
+import DataTableActionButton from '@/components/table/DataTableActionButton.vue'
 
-defineProps({
-  onAdd: Function,
-  isAddDisabled: Boolean,
-  onEdit: Function,
-  isEditDisabled: Boolean,
-  onDelete: Function,
-  isDeleteDisabled: Boolean
+const props = defineProps({
+  row: { type: Object, required: true },
+  view: Object,
+  add: Object,
+  edit: Object,
+  remove: Object
 })
+const emits = defineEmits(['action'])
+
+const view = ref({ ...props.view, type: 'view', label: '查看' })
+const add = ref({ ...props.add, type: 'add', label: '新增' })
+const edit = ref({ ...props.edit, type: 'edit', label: '编辑' })
+const remove = ref({ ...props.remove, type: 'remove', label: '删除' })
+
+function handleClick(action) {
+  const data = {}
+  for (let field of action.fields) {
+    if (typeof field === 'string') {
+      data[field] = props.row[field]
+      continue
+    }
+    if (typeof field.value === 'function') {
+      data[field.key] = field.value(props.row)
+    } else {
+      data[field.key] = field.value
+    }
+  }
+  emits('action', { label: action.label, type: action.type, drawerFromData: data })
+}
 </script>
 
 <template>
   <n-flex>
-    <n-button v-if="onAdd" :disabled="isAddDisabled" circle secondary type="info" @click="onAdd">
-      <template #icon>
-        <n-icon>
-          <Add />
-        </n-icon>
-      </template>
-    </n-button>
-    <n-button
-      v-if="onEdit"
-      :disabled="isEditDisabled"
-      circle
-      secondary
+    <DataTableActionButton :action="view" :icon="EyeOutline" @click="handleClick(view)" />
+    <DataTableActionButton :action="add" :icon="Add" type="info" @click="handleClick(add)" />
+    <DataTableActionButton
+      :action="edit"
+      :icon="BuildOutline"
       type="warning"
-      @click="onEdit"
-    >
-      <template #icon>
-        <n-icon>
-          <BuildOutline />
-        </n-icon>
-      </template>
-    </n-button>
-    <n-popover v-if="onDelete" placement="left" trigger="click">
-      <template #trigger>
-        <n-button :disabled="isDeleteDisabled" circle secondary type="error">
-          <template #icon>
-            <n-icon>
-              <TrashBinOutline />
-            </n-icon>
-          </template>
-        </n-button>
-      </template>
-      <n-button size="small" type="error" @click="onDelete">确认删除</n-button>
-    </n-popover>
+      @click="handleClick(edit)"
+    />
+    <DataTableActionButton
+      :action="remove"
+      :icon="TrashBinOutline"
+      type="error"
+      @click="handleClick(remove)"
+    />
   </n-flex>
 </template>
-
-<style scoped></style>
