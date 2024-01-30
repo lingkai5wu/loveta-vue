@@ -16,6 +16,6 @@ export async function updateMenu(menu) {
   return await request.patch('/menu', menu)
 }
 
-export async function removeMenu(id) {
-  return await request.delete('/menu/' + id)
+export async function removeMenu(menu) {
+  return await request.delete('/menu/' + menu.id)
 }

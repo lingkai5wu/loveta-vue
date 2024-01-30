@@ -3,51 +3,100 @@ import { Add, BuildOutline, EyeOutline, TrashBinOutline } from '@vicons/ionicons
 import DataTableActionButton from '@/components/table/DataTableActionButton.vue'
 
 const props = defineProps({
-  row: { type: Object, required: true },
-  view: Object,
-  add: Object,
-  edit: Object,
-  remove: Object
+  actions: { type: Object, required: true },
+  row: { type: Object, required: true }
 })
 const emits = defineEmits(['action'])
 
-const view = ref({ ...props.view, type: 'view', label: '查看' })
-const add = ref({ ...props.add, type: 'add', label: '新增' })
-const edit = ref({ ...props.edit, type: 'edit', label: '编辑' })
-const remove = ref({ ...props.remove, type: 'remove', label: '删除' })
+const defaultActions = {
+  view: {
+    label: '查看',
+    drawer: true,
+    popConfirm: false
+  },
+  add: {
+    label: '新增',
+    drawer: true,
+    popConfirm: false
+  },
+  edit: {
+    label: '修改',
+    drawer: true,
+    popConfirm: false
+  },
+  remove: {
+    label: '删除',
+    drawer: false,
+    popConfirm: true
+  }
+}
+const updatedActions = ref({})
+getUpdatedActions()
 
-function handleClick(action) {
-  const data = {}
-  for (let field of action.fields) {
-    if (typeof field === 'string') {
-      data[field] = props.row[field]
-      continue
-    }
-    if (typeof field.value === 'function') {
-      data[field.key] = field.value(props.row)
-    } else {
-      data[field.key] = field.value
+function getUpdatedActions() {
+  for (let actionKey in props.actions) {
+    updatedActions.value[actionKey] = {
+      row: props.row,
+      ...defaultActions[actionKey],
+      ...props.actions[actionKey]
     }
   }
-  emits('action', { label: action.label, type: action.type, drawerFromData: data })
+}
+
+watchEffect(checkDisable)
+
+function checkDisable() {
+  for (let key in updatedActions.value) {
+    const rawAction = props.actions[key]
+    if (typeof rawAction.disable === 'function') {
+      updatedActions.value[key].disable = rawAction.disable(props.row)
+    }
+  }
+}
+
+function handleActionClick(action) {
+  const data = {}
+  if (action.fields) {
+    for (let field of action.fields) {
+      if (typeof field === 'string') {
+        data[field] = props.row[field]
+        continue
+      }
+      if (typeof field.value === 'function') {
+        data[field.key] = field.value(props.row)
+      } else {
+        data[field.key] = field.value
+      }
+    }
+  }
+  emits('action', { ...action, data: data })
 }
 </script>
 
 <template>
   <n-flex>
-    <DataTableActionButton :action="view" :icon="EyeOutline" @click="handleClick(view)" />
-    <DataTableActionButton :action="add" :icon="Add" type="info" @click="handleClick(add)" />
     <DataTableActionButton
-      :action="edit"
-      :icon="BuildOutline"
-      type="warning"
-      @click="handleClick(edit)"
+      :action="updatedActions.view"
+      :icon="EyeOutline"
+      @action-click="handleActionClick"
     />
     <DataTableActionButton
-      :action="remove"
+      :action="updatedActions.add"
+      :icon="Add"
+      type="info"
+      @action-click="handleActionClick"
+    />
+    <DataTableActionButton
+      :action="updatedActions.edit"
+      :icon="BuildOutline"
+      type="warning"
+      @action-click="handleActionClick"
+    />
+    <DataTableActionButton
+      :action="updatedActions.remove"
       :icon="TrashBinOutline"
       type="error"
-      @click="handleClick(remove)"
+      @action-click="handleActionClick"
     />
   </n-flex>
 </template>

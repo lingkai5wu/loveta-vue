@@ -2,21 +2,20 @@
 import DataActionButtonGroup from '@/components/table/DataTableActionButtonGroup.vue'
 
 const props = defineProps({
+  actions: Object,
   columns: { type: Array, required: true },
   getDataFunction: { type: Function, required: true },
-  actions: Object,
   emptyName: { type: String, default: '' }
 })
 const tableData = ref()
 const isTableLoading = ref(false)
 getData()
 
-const columns = props.columns
+const columns = ref(props.columns)
 setActionColumn()
 
-const isDrawerShow = ref(false)
-const drawerTitle = ref()
 const drawerData = ref()
+const isDrawerShow = ref(false)
 
 async function getData() {
   isTableLoading.value = true
@@ -26,29 +25,38 @@ async function getData() {
 
 function setActionColumn() {
   if (props.actions) {
-    columns.push({
+    columns.value.push({
       title: '操作',
       key: 'action',
       render(row) {
         return h(DataActionButtonGroup, {
           row: row,
-          ...props.actions,
-          onAction: (e) => handelAction(e)
+          actions: props.actions,
+          onAction: (action) => handelAction(action)
         })
       }
     })
   }
 }
 
-function handelAction(e) {
-  console.log(e)
-  isDrawerShow.value = true
-  drawerTitle.value = e.label + props.emptyName
-  drawerData.value = {
-    actionType: e.type,
-    formData: e.drawerFromData,
-    tableData: tableData
+async function handelAction(action) {
+  if (!action.drawer) {
+    await handelSubmit(action)
+    return
   }
+  isDrawerShow.value = true
+  drawerData.value = {
+    title: action.label + props.emptyName,
+    tableData: tableData,
+    action: action
+  }
+}
+
+async function handelSubmit(action) {
+  await action.handle(action.data)
+  window.$message.success(action.label + '成功')
+  isDrawerShow.value = false
+  getData()
 }
 </script>
 
@@ -61,8 +69,16 @@ function handelAction(e) {
     :row-key="(row) => row.id"
   />
   <n-drawer v-model:show="isDrawerShow">
-    <n-drawer-content :title="drawerTitle" closable>
-      <slot name="drawer" v-bind="drawerData" />
+    <n-drawer-content :title="drawerData.title" closable>
+      <n-form :model="drawerData.action.data">
+        <slot :formData="drawerData.action.data" :tableData="tableData" name="drawer" />
+        <n-form-item :show-label="false">
+          <n-flex>
+            <n-button @click="isDrawerShow = false">取消</n-button>
+            <n-button type="primary" @click="handelSubmit(drawerData.action)">提交 </n-button>
+          </n-flex>
+        </n-form-item>
+      </n-form>
     </n-drawer-content>
   </n-drawer>
 </template>
