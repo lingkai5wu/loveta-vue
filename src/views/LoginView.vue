@@ -6,7 +6,7 @@ import { initRuntimeData } from '@/utils/init.js'
 
 const formData = ref({
   phone: '18888888888',
-  password: '123456'
+  password: 'loveta123'
 })
 const isLoginLoading = ref(false)
 const isRegisterLoading = ref(false)

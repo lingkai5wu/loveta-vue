@@ -75,7 +75,7 @@ async function handelSubmit(action) {
         <n-form-item :show-label="false">
           <n-flex>
             <n-button @click="isDrawerShow = false">取消</n-button>
-            <n-button type="primary" @click="handelSubmit(drawerData.action)">提交 </n-button>
+            <n-button type="primary" @click="handelSubmit(drawerData.action)">提交</n-button>
           </n-flex>
         </n-form-item>
       </n-form>

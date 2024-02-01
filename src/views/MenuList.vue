@@ -15,7 +15,8 @@ const actions = ref({
       { key: 'pid', value: (row) => row.id },
       { key: 'type', value: 'ROUTE' }
     ],
-    handle: saveMenu
+    handle: saveMenu,
+    disable: (row) => row.type !== 'PARENT'
   },
   edit: {
     fields: ['id', 'pid', ...columns.value.map((column) => column.key)],
