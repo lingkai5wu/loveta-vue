@@ -1,87 +1,38 @@
 <script setup>
-import router from '@/router'
-import { useAuthStore } from '@/stores/auth.js'
-import { login, register } from '@/api/auth.js'
-import { initRuntimeData } from '@/utils/init.js'
-
-const formData = ref({
-  phone: '18888888888',
-  password: 'loveta123'
-})
-const isLoginLoading = ref(false)
-const isRegisterLoading = ref(false)
-const authStore = useAuthStore()
-
-function onLogin() {
-  isLoginLoading.value = true
-  login(formData.value)
-    .then(async (data) => {
-      authStore.token = data
-      await initRuntimeData()
-      window.$message.success('登录成功')
-      router.push('/')
-    })
-    .finally(() => {
-      isLoginLoading.value = false
-    })
-}
-
-function onRegister() {
-  isRegisterLoading.value = true
-  register(formData.value)
-    .then((data) => {
-      authStore.token = data
-      window.$message.success('注册成功')
-    })
-    .finally(() => {
-      isRegisterLoading.value = false
-    })
-}
+import TheRegister from '@/components/auth/TheRegister.vue'
+import TheLogin from '@/components/auth/TheLogin.vue'
 </script>
 
 <template>
-  <div class="container">
+  <n-flex align="center" class="container" justify="center">
     <n-card>
-      <template #header>
-        <span>登录</span>
-      </template>
-      <n-form :model="formData">
-        <n-form-item label="手机号" path="phone">
-          <n-input v-model:value="formData.phone" />
-        </n-form-item>
-        <n-form-item label="密码" path="password">
-          <n-input v-model:value="formData.password" type="password" />
-        </n-form-item>
-        <n-form-item>
-          <n-button
-            :disabled="isRegisterLoading"
-            :loading="isLoginLoading"
-            type="primary"
-            @click="onLogin"
-            >登录
-          </n-button>
-        </n-form-item>
-        <n-button :disabled="isLoginLoading" :loading="isRegisterLoading" @click="onRegister"
-          >注册
-        </n-button>
-      </n-form>
+      <n-tabs animated default-value="login" size="large">
+        <n-tab-pane name="login" tab="登录">
+          <TheLogin />
+        </n-tab-pane>
+        <n-tab-pane name="register" tab="注册">
+          <TheRegister />
+        </n-tab-pane>
+      </n-tabs>
     </n-card>
-  </div>
+  </n-flex>
 </template>
 
-<style scoped>
+<style>
 .container {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .n-card {
   max-width: 400px;
 }
 
-.n-button {
-  width: 100%;
+.n-h1,
+.n-h3 {
+  margin: 4px 0;
+}
+
+.n-h3 {
+  margin-bottom: 24px;
 }
 </style>

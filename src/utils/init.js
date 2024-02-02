@@ -9,6 +9,7 @@ import { createDiscreteApi } from 'naive-ui'
 
 export async function initRuntimeData() {
   if (!useAuthStore().token) {
+    console.log(111)
     const route = unref(router.currentRoute)
     if (route.path !== '/login') {
       router.replace('/login')
