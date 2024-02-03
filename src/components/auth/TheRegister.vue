@@ -6,13 +6,13 @@ import { useAuthStore } from '@/stores/auth.js'
 import SmsCode from '@/components/auth/SmsCode.vue'
 
 const formData = ref({
-  phone: null,
+  phone: '',
   smsCode: '808080',
-  password: null
+  password: '',
+  reenteredPassword: ''
 })
 const formRef = ref()
 const reenteredPasswordRef = ref()
-const reenteredPassword = ref()
 const rules = {
   phone: [
     {
@@ -22,7 +22,7 @@ const rules = {
           return new Error('请输入手机号')
         }
         if (!/^1\d{10}$/.test(value)) {
-          return new Error('请输入正确的中国大陆手机号')
+          return new Error('请输入正确的手机号')
         }
         return true
       },
@@ -69,20 +69,19 @@ const rules = {
   reenteredPassword: [
     {
       required: true,
-      validator: () => reenteredPassword.value?.length > 0,
       message: '请再次输入密码',
       trigger: 'blur'
     },
     {
-      validator: () =>
+      validator: (_, value) =>
         formData.value.password &&
-        formData.value.password.startsWith(reenteredPassword.value) &&
-        formData.value.password.length >= reenteredPassword.value.length,
+        formData.value.password.startsWith(value) &&
+        formData.value.password.length >= value.length,
       message: '两次密码输入不一致',
       trigger: 'input'
     },
     {
-      validator: () => reenteredPassword.value === formData.value.password,
+      validator: (_, value) => value === formData.value.password,
       message: '两次密码输入不一致',
       trigger: ['blur', 'password-input']
     }
@@ -91,7 +90,7 @@ const rules = {
 const isLoading = ref(false)
 
 function handlePasswordInput() {
-  if (reenteredPassword.value) {
+  if (formData.value.reenteredPassword) {
     reenteredPasswordRef.value.validate({ trigger: 'password-input' }).catch(() => {
       // pass
     })
@@ -103,6 +102,8 @@ const authStore = useAuthStore()
 async function handelRegister() {
   await formRef.value.validate()
   isLoading.value = true
+  const data = { ...formData.value }
+  delete data.reenteredPassword
   register(formData.value)
     .then(async (data) => {
       authStore.token = data
@@ -138,7 +139,7 @@ async function handelRegister() {
     </n-form-item>
     <n-form-item ref="reenteredPasswordRef" first label="重复密码" path="reenteredPassword">
       <n-input
-        v-model:value="reenteredPassword"
+        v-model:value="formData.reenteredPassword"
         placeholder="再次输入您的密码"
         show-password-on="mousedown"
         type="password"
