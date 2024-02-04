@@ -51,6 +51,11 @@ function handelLogin() {
       isLoading.value = false
     })
 }
+
+function handelForgotPassword() {
+  window.$message.warning('这个功能还没做...')
+  window.$message.warning('再回忆一下')
+}
 </script>
 
 <template>
@@ -65,7 +70,7 @@ function handelLogin() {
     </n-form-item>
     <n-flex>
       <n-button :loading="isLoading" type="primary" @click="handelLogin">登录</n-button>
-      <n-button quaternary type="info">忘记密码</n-button>
+      <n-button quaternary type="info" @click="handelForgotPassword">忘记密码</n-button>
     </n-flex>
   </n-form>
 </template>

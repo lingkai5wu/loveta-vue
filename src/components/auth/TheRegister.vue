@@ -7,7 +7,7 @@ import SmsCode from '@/components/auth/SmsCode.vue'
 
 const formData = ref({
   phone: '',
-  smsCode: '808080',
+  smsCode: '',
   password: '',
   reenteredPassword: ''
 })

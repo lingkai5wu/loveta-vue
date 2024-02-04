@@ -4,8 +4,10 @@ export const useAuthStore = defineStore(
   'auth',
   () => {
     const token = ref()
+    const lastSentSmsCodeTimestamp = ref()
     return {
-      token
+      token,
+      lastSentSmsCodeTimestamp
     }
   },
   {
