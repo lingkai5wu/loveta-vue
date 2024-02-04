@@ -2,22 +2,24 @@
 import TheHeader from '@/components/layout/TheHeader.vue'
 import TheSider from '@/components/layout/TheSider.vue'
 
-const collapsed = ref(false)
-const collapsedWidth = 0
+const drawerSiderShow = ref(false)
 
-function handleCollapsedChange() {
-  collapsed.value = !collapsed.value
+function handleDrawerSiderShowChange() {
+  drawerSiderShow.value = !drawerSiderShow.value
 }
 </script>
 
 <template>
   <n-layout has-sider>
-    <n-layout-sider :collapsed="collapsed" :collapsed-width="collapsedWidth" collapse-mode="width">
-      <TheSider :collapsed="collapsed" :collapsed-width="collapsedWidth" />
+    <n-layout-sider>
+      <TheSider />
     </n-layout-sider>
+    <n-drawer v-model:show="drawerSiderShow" placement="left">
+      <TheSider @menu-click="drawerSiderShow = false" />
+    </n-drawer>
     <n-layout>
       <n-layout-header>
-        <TheHeader @collapsed-change="handleCollapsedChange" />
+        <TheHeader @drawer-sider-show-change="handleDrawerSiderShowChange" />
       </n-layout-header>
       <n-layout-content>
         <router-view />
@@ -25,3 +27,11 @@ function handleCollapsedChange() {
     </n-layout>
   </n-layout>
 </template>
+
+<style scoped>
+@media screen and (max-width: 1024px) {
+  .n-layout-sider {
+    display: none;
+  }
+}
+</style>

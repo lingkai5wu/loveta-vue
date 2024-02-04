@@ -5,7 +5,7 @@ import { useAuthStore } from '@/stores/auth.js'
 import { MenuOutline } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
 
-defineEmits(['collapsedChange'])
+defineEmits(['drawerSiderShowChange'])
 
 function handelLogout() {
   logout().then(() => {
@@ -18,15 +18,24 @@ function handelLogout() {
 
 <template>
   <n-page-header class="header">
-    <n-flex>
-      <n-button round secondary @click="$emit('collapsedChange')">
-        <template #icon>
-          <n-icon>
-            <MenuOutline />
-          </n-icon>
-        </template>
-      </n-button>
-      <n-button round secondary type="warning" @click="handelLogout">登出</n-button>
+    <n-flex justify="space-between">
+      <n-flex>
+        <n-button
+          id="drawer-menu-show-change-button"
+          round
+          secondary
+          @click="$emit('drawerSiderShowChange')"
+        >
+          <template #icon>
+            <n-icon>
+              <MenuOutline />
+            </n-icon>
+          </template>
+        </n-button>
+      </n-flex>
+      <n-flex>
+        <n-button round secondary type="warning" @click="handelLogout">登出</n-button>
+      </n-flex>
     </n-flex>
   </n-page-header>
 </template>
@@ -34,5 +43,11 @@ function handelLogout() {
 <style scoped>
 .header {
   padding: 10px;
+}
+
+@media screen and (min-width: 1024px) {
+  #drawer-menu-show-change-button {
+    display: none;
+  }
 }
 </style>
