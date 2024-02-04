@@ -17,7 +17,7 @@ function handelLogout() {
 </script>
 
 <template>
-  <n-page-header class="header">
+  <n-page-header>
     <n-flex justify="space-between">
       <n-flex>
         <n-button
@@ -41,10 +41,6 @@ function handelLogout() {
 </template>
 
 <style scoped>
-.header {
-  padding: 10px;
-}
-
 @media screen and (min-width: 1024px) {
   #drawer-menu-show-change-button {
     display: none;

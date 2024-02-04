@@ -34,4 +34,10 @@ function handleDrawerSiderShowChange() {
     display: none;
   }
 }
+
+.n-layout-header,
+.n-layout-content {
+  width: auto;
+  margin: 10px;
+}
 </style>
